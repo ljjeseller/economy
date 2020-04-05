@@ -10,29 +10,46 @@
         </div>
 
         <div class="swiper" >
-            <van-swipe class="my-swipe" @change="changeDate" indicator-color="white" :show-indicators="false" :loop="false">
-                <van-swipe-item>
+
+            <swiper ref="mySwiper" :options="swiperOptions"  @slideChangeTransitionEnd="changeDate">
+                <swiper-slide :key="index" v-for="(swipe, index) in swipeData">
+                    <div class="scroll-container">
+                        <div class="scroll-border"></div>
+                        <div class="scroll-border-shadow"></div>
+                        <div class="scroll-content">
+                            <van-pull-refresh v-model="isLoading" @refresh="onRefresh" pulling-text="下拉新增条目" loosing-text="下拉新增条目">
+                                    <div class="scroll-content-inner">
+                                        <van-cell :key="idx" v-for="(item, idx) in swipe.costList" :title="item.title" :value="item.cost" icon="location-o" />
+                                    </div>
+                                    
+                            </van-pull-refresh>
+                        </div>
+
+                    </div>
+                </swiper-slide>
+                <!-- <swiper-slide>Slide 2</swiper-slide>
+                <swiper-slide>Slide 3</swiper-slide>
+                <swiper-slide>Slide 4</swiper-slide>
+                <swiper-slide>Slide 5</swiper-slide> -->
+
+            </swiper>
+
+            <!-- <van-swipe class="my-swipe" @change="changeDate" indicator-color="white" :show-indicators="false" :loop="false" initial-swipe='1'>
+                <van-swipe-item :key="index" v-for="(swipe, index) in swipeData">
                     <div class="scroll-container">
                         <van-pull-refresh v-model="isLoading" @refresh="onRefresh" pulling-text="下拉新增条目" loosing-text="下拉新增条目">
-                            <van-cell :key="x" v-for="x in 10" title="单元格" value="内容" icon="location-o" />
+                            
+                                <van-cell :key="idx" v-for="(item, idx) in swipe.costList" :title="item.title" :value="item.cost" icon="location-o" />
+                            
                         </van-pull-refresh>
                     </div>
                 </van-swipe-item>
-                <van-swipe-item>
-                    <div class="scroll-container">
-                        <van-pull-refresh v-model="isLoading" @refresh="onRefresh" pulling-text="下拉新增条目" loosing-text="下拉新增条目">
-                            <van-cell :key="x" v-for="x in 10" title="单元格" value="内容" icon="location-o" />
-                        </van-pull-refresh>
-                    </div>
-                </van-swipe-item>
-                <van-swipe-item>3</van-swipe-item>
-                <van-swipe-item>4</van-swipe-item>
-            </van-swipe>
+            </van-swipe> -->
         </div>
 
-        <div @click="bbb" class="statistics"><van-icon name="chart-trending-o" /></div>
+        <div @click="showStatistics=true" class="statistics"><van-icon name="chart-trending-o" /></div>
 
-        <div @click="bbb" class="setting"><van-icon name="setting-o" /></div>
+        <div @click="toSetting" class="setting"><van-icon name="setting-o" /></div>
 
         <van-number-keyboard
             v-model="cost"
@@ -89,6 +106,24 @@
             
         </van-popup>
 
+        <van-popup
+            v-model="showStatistics"
+            position="bottom">
+            
+            <van-cell-group>
+                <van-cell title="单元格" value="内容" />
+                <van-cell title="单元格" value="内容" />
+                <van-cell title="单元格" value="内容" />
+                <van-cell title="单元格" value="内容" />
+                <van-cell title="单元格" value="内容" />
+                <van-cell title="单元格" value="内容" />
+                <van-cell title="单元格" value="内容" />
+                <van-cell title="单元格" value="内容" />
+            </van-cell-group>
+            
+            
+        </van-popup>
+
     </div>
 </template>
 
@@ -139,23 +174,180 @@ export default {
             isLoading: false,
             show: false,
             showKeyboard: false,
+            showStatistics: false,
 
             cost: '',
             tagName: '名称',
 
             date: '',
+
+            swipeData: [
+                {
+                    costList: [
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                    ],
+                },
+                {
+                    costList: [
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                    ],
+                },
+                {
+                    costList: [
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        },
+                    ],
+                },
+            ],
+
+            swiperOptions: {
+                pagination: {
+                    el: '.swiper-pagination'
+                },
+                initialSlide: 1,
+                // Some Swiper option/callback...
+            }
         };
+    },
+    computed: {
+        swiper() {
+            return this.$refs.mySwiper.$swiper
+        }
     },
     mounted() {
         this.date = dayjs().format('YYYY-MM-DD');
     },
     methods: {
-        changeDate() {
-            console.log('change date');
+        changeDate(index) {
+            console.log('change date'+ index);
+
+            this.swipeData.push(
+                {
+                    costList: [
+                        {
+                            title: '水果',
+                            cost: 99.99,
+                        }
+                    ],
+                }
+            );
+
+            this.swiper.removeSlide(0);
         },
         bbb() {
             this.$toast('coming soon');
             this.$router.push({ name: 'Login' });
+        },
+        toSetting() {
+            this.$router.push({ name: 'Setting' });
         },
         onRefresh() {
             this.isLoading = false;
@@ -187,18 +379,73 @@ export default {
             top: 22vh;
             background: #fff;
 
-            .my-swipe{
+            .swiper-container{
                 height: 100%;
+            }
 
-                .van-swipe-item {
-                    background-color: #39a9ed;
+  
+            .swiper-slide{
+                background-color: #39a9ed;
+                // overflow-y: auto;
+            }
+
+            .scroll-container{
+                position: relative;
+                margin: 0 3vw;
+                height: 100%;
+                // overflow-y: auto;
+            //    border-top: 50px solid #333;
+            //    border-radius: 50px;
+                .scroll-border{
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    position: absolute;
+                    border: 40px solid #333;
+                    border-radius: 40px;
+                    z-index: 1;
+                    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
                 }
 
-                .scroll-container{
-                    margin: 0 3vw;
-                    height: 100%;
-                    overflow-y: auto;
+                .scroll-border-shadow{
+                    top: 20px;
+                    left: 0;
+                    right: 0;
+                    position: absolute;
+                    border-top: 20px solid #333;
+                    border-radius: 40px;
+                    z-index: 3;
+                    box-shadow: 0 30px 30px rgba(0, 0, 0, 0.5);
                 }
+
+                .scroll-content{
+                    top: 50px;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    position: absolute;
+                    z-index: 2;
+
+                }
+
+                .scroll-content-inner{
+                    background-color: #fff;
+                    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+                }
+            }
+            
+
+            .van-pull-refresh{
+                height: 100%;
+                overflow-y: auto;
+                margin: 0 3vw;
+                
+               
+                
+            }
+            .no-more{
+                padding: 20vh;
+                background: #ccc;
             }
         }
     }
@@ -223,6 +470,7 @@ export default {
         left: 4vw;
         bottom: 3vh;
         font-size: 4rem;
+        z-index: 1;
     }
 
     .setting{
@@ -230,5 +478,6 @@ export default {
         right: 4vw;
         bottom: 3vh;
         font-size: 4rem;
+        z-index: 1;
     }
 </style>
