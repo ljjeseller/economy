@@ -1,8 +1,8 @@
 <template>
     <div id="app">
-        <transition :name="transitionName">
-            <router-view class="child-view"></router-view>
-        </transition>
+        <!-- <transition :name="transitionName"> -->
+            <router-view class="child-view" v-transition></router-view>
+        <!-- </transition> -->
     </div>
 </template>
 

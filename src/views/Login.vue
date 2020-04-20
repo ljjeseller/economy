@@ -7,7 +7,7 @@
         <van-form @submit="onSubmit">
             <van-field
                 v-model="username"
-                name="用户名"
+                name="username"
                 label="用户名"
                 placeholder="用户名"
                 :rules="[{ required: true, message: '请填写用户名' }]"
@@ -16,7 +16,7 @@
             <van-field
                 v-model="password"
                 type="password"
-                name="密码"
+                name="password"
                 label="密码"
                 placeholder="密码"
                 :rules="[{ required: true, message: '请填写密码' }]"
@@ -40,26 +40,33 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
 
-
-export default {
-    name: 'Login',
-    data() {
-        return {
-            username: 'admin',
-            password: '111111',
-            checked: true,
-        };
-    },
-    methods: {
-        onSubmit(values) {
-            console.log('submit', values);
-
-            console.log(111);
-            this.$router.push({ name: 'Index' });
+    export default {
+        name: 'Login',
+        data() {
+            return {
+                username: 'admin',
+                password: '123456',
+                checked: true,
+            };
         },
-    },
-}
+        methods: {
+            ...mapActions('user', [
+                'updateUserInfo',
+            ]),
+            async onSubmit(values) {
+                // console.log('submit', values);
+                try {
+                    const userInfo = await this.$api.user.userLogin(values);
+                    this.updateUserInfo(userInfo);
+                    this.$router.push({ name: 'Index' });
+                } catch (error) {
+                    this.$toast(error);
+                }
+            },
+        },
+    }
 </script>
 
 <style scoped lang="scss">

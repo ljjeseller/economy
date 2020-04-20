@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import axios from 'axios'
 import store from '../store'
 import router from '../router'
@@ -40,7 +40,8 @@ axios.interceptors.response.use((response) => {
                 break;
 
             default:
-                Vue.$message.error(error.response.data.msg || '未知错误');
+                // console.log(error.response);
+                return Promise.reject(error.response.data.error || '未知错误');
         }
     } else {
         return Promise.reject(error.message || '未知错误');

@@ -8,11 +8,9 @@ import axios from '../config/axios'
 
 // userLogin
 const userLogin = (params) => {
-    // console.log(params);
-    // const url = `/Oauth/Token`;
-    const url = `/login`;
+    const url = `/api/v1/login`;
     return new Promise((resolve, reject) => {
-        axios.post(url, { params }).then((response) => {
+        axios.post(url, { ...params }).then((response) => {
             const { code, msg, data } = response.data;
             if (code === 0) {
                 resolve(data);

@@ -10,7 +10,7 @@ if (hostname.indexOf('aaa') > -1) {
     BASE_URL = 'https://yapi.deepdmx.com/mock/8';
 } else {
     // local
-    BASE_URL = 'https://yapi.deepdmx.com/mock/8';
+    BASE_URL = 'http://localhost:7001';
 }
 
 export  { BASE_URL };

@@ -17,12 +17,18 @@
                         <div class="scroll-border"></div>
                         <div class="scroll-border-shadow"></div>
                         <div class="scroll-content">
-                            <van-pull-refresh v-model="isLoading" @refresh="onRefresh" pulling-text="下拉新增条目" loosing-text="下拉新增条目">
+                            
+                           
+                                <van-pull-refresh v-model="isLoading" @refresh="onRefresh" pulling-text="下拉新增条目" loosing-text="下拉新增条目">
+        
+                                                                    
                                     <div class="scroll-content-inner">
                                         <van-cell :key="idx" v-for="(item, idx) in swipe.costList" :title="item.title" :value="item.cost" icon="location-o" />
                                     </div>
-                                    
-                            </van-pull-refresh>
+                                        
+                                </van-pull-refresh>
+                            
+      
                         </div>
 
                     </div>
@@ -34,17 +40,6 @@
 
             </swiper>
 
-            <!-- <van-swipe class="my-swipe" @change="changeDate" indicator-color="white" :show-indicators="false" :loop="false" initial-swipe='1'>
-                <van-swipe-item :key="index" v-for="(swipe, index) in swipeData">
-                    <div class="scroll-container">
-                        <van-pull-refresh v-model="isLoading" @refresh="onRefresh" pulling-text="下拉新增条目" loosing-text="下拉新增条目">
-                            
-                                <van-cell :key="idx" v-for="(item, idx) in swipe.costList" :title="item.title" :value="item.cost" icon="location-o" />
-                            
-                        </van-pull-refresh>
-                    </div>
-                </van-swipe-item>
-            </van-swipe> -->
         </div>
 
         <div @click="showStatistics=true" class="statistics"><van-icon name="chart-trending-o" /></div>
@@ -329,18 +324,18 @@ export default {
         changeDate(index) {
             console.log('change date'+ index);
 
-            this.swipeData.push(
-                {
-                    costList: [
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        }
-                    ],
-                }
-            );
+            // this.swipeData.push(
+            //     {
+            //         costList: [
+            //             {
+            //                 title: '水果',
+            //                 cost: 99.99,
+            //             }
+            //         ],
+            //     }
+            // );
 
-            this.swiper.removeSlide(0);
+            // this.swiper.removeSlide(0);
         },
         bbb() {
             this.$toast('coming soon');
@@ -366,6 +361,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+//  .doge {
+//     width: 140px;
+//     height: 72px;
+//     margin-top: 8px;
+//     border-radius: 4px;
+//   }
+
     .index-container{
         position: relative;
         height: 100vh;
@@ -383,7 +385,6 @@ export default {
                 height: 100%;
             }
 
-  
             .swiper-slide{
                 background-color: #39a9ed;
                 // overflow-y: auto;
@@ -425,30 +426,54 @@ export default {
                     bottom: 0;
                     position: absolute;
                     z-index: 2;
+                    
 
                 }
 
                 .scroll-content-inner{
-                    background-color: #fff;
+                    // margin-bottom: 50%;
+                    background-color: #ccc;
                     box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+                }
+                .scroll-content-inner:before{
+                    content: '下拉新增条目';
+                    position: absolute;
+                    left: 0;
+                    right:0;
+                    top:-50vh;
+                    height: 50vh;
+                    background: #fff;
+                    color: #333;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-end;
+                    font-size: 2rem;
                 }
             }
             
-
             .van-pull-refresh{
                 height: 100%;
                 overflow-y: auto;
                 margin: 0 3vw;
-                
-               
-                
+                // background-color: #fff;
+                // box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
             }
+
+            // .scroll-bg{
+            //     height: 100%;
+            //     overflow-y: auto;
+            //     margin: 0 3vw;
+            // }
+
+
+
             .no-more{
                 padding: 20vh;
                 background: #ccc;
             }
         }
     }
+
 
     .echarts {
         width: 100%;
