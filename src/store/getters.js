@@ -1,6 +1,6 @@
 const getters = {
     token: state => state.user.token,
-    nickname: state => state.user.nickname,
+    uid: state => state.user.uid,
     roles: state => state.user.roles,
     permissionRoutes: state => state.permission.routes,
     currentPatient(state) {

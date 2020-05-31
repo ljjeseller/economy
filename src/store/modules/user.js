@@ -3,6 +3,7 @@ const state = {
     token: '',
     username: '',
     tags: '',
+    uid: 0,
 }
 
 const mutations = {
@@ -10,15 +11,17 @@ const mutations = {
         state.token = payload;
     },
     UPDATE_USER_INFO(state, userInfo) {
-        const { token, username, tags } = userInfo;
+        const { token, username, tags, uid } = userInfo;
         state.token = token;
         state.username = username;
         state.tags = tags;
+        state.uid = uid;
     },
     LOGOUT(state) {
         state.token = '';
         state.username = '';
         state.tags = '';
+        state.uid = 0;
     },
 }
 

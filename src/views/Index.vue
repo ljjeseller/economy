@@ -6,40 +6,35 @@
 
         <div class="tips">
             <span>{{date}}</span>
-            <span>&yen; 99.99</span>
+            <span>&yen; {{todayCost}}</span>
         </div>
 
-        <div class="swiper" >
-
-            <swiper ref="mySwiper" :options="swiperOptions"  @slideChangeTransitionEnd="changeDate">
+        <div class="swiper">
+            <swiper ref="mySwiper" :options="swiperOptions"  @slidePrevTransitionEnd="slidePrev" @slideNextTransitionEnd="slideNext">
                 <swiper-slide :key="index" v-for="(swipe, index) in swipeData">
                     <div class="scroll-container">
                         <div class="scroll-border"></div>
                         <div class="scroll-border-shadow"></div>
                         <div class="scroll-content">
-                            
-                           
-                                <van-pull-refresh v-model="isLoading" @refresh="onRefresh" pulling-text="下拉新增条目" loosing-text="下拉新增条目">
-        
-                                                                    
-                                    <div class="scroll-content-inner">
-                                        <van-cell :key="idx" v-for="(item, idx) in swipe.costList" :title="item.title" :value="item.cost" icon="location-o" />
-                                    </div>
-                                        
-                                </van-pull-refresh>
-                            
-      
+                            <van-pull-refresh v-model="isLoading" @refresh="onRefresh" pulling-text="下拉新增条目" loosing-text="下拉新增条目">
+                                <div class="scroll-content-inner">
+                                    <!-- {{index}} -->
+     
+                                    <van-cell 
+                                        :key="idx" 
+                                        v-for="(item, idx) in swipe.costList" 
+                                        :title="item.tags.tagName" 
+                                        :value="item.cost" 
+                                        :icon="item.tags.icon"
+                                        v-longpress="deleteRecord(item)"
+                                    />
+                                    <div class="no-result" v-if="swipe.costList.length === 0"></div>
+                                </div>
+                            </van-pull-refresh>
                         </div>
-
                     </div>
                 </swiper-slide>
-                <!-- <swiper-slide>Slide 2</swiper-slide>
-                <swiper-slide>Slide 3</swiper-slide>
-                <swiper-slide>Slide 4</swiper-slide>
-                <swiper-slide>Slide 5</swiper-slide> -->
-
             </swiper>
-
         </div>
 
         <div @click="showStatistics=true" class="statistics"><van-icon name="chart-trending-o" /></div>
@@ -72,33 +67,13 @@
                 :border="false"
             />
             
-            <van-swipe indicator-color="white">
-                <van-swipe-item>
+            <van-swipe indicator-color="white" :loop="false">
+                <van-swipe-item v-for="(section, index) in tagList" :key="index">
                     <van-grid clickable>
-                        <van-grid-item @click="clickTag" icon="photo-o" text="文字" />
-                        <van-grid-item @click="clickTag" icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />   
-                    </van-grid>
-                </van-swipe-item>
-                <van-swipe-item>
-                    <van-grid>
-                        <van-grid-item @click="clickTag" icon="photo-o" text="文字" />
-                        <van-grid-item @click="clickTag" icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />
-                        <van-grid-item icon="photo-o" text="文字" />   
+                        <van-grid-item v-for="(item, idx) in section.items" :key="idx" @click="clickTag(item)" :icon="item.icon" :text="item.name" />
                     </van-grid>
                 </van-swipe-item>
             </van-swipe>
-            
         </van-popup>
 
         <van-popup
@@ -127,6 +102,7 @@ import ECharts from 'vue-echarts'
 // import 'echarts/lib/chart/line'
 // import 'echarts/lib/component/polar'
 import dayjs from 'dayjs'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'Login',
@@ -172,134 +148,20 @@ export default {
             showStatistics: false,
 
             cost: '',
-            tagName: '名称',
+            tagName: '',
+            tagId: 0,
 
             date: '',
 
             swipeData: [
                 {
-                    costList: [
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                    ],
+                    costList: [],
                 },
                 {
-                    costList: [
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                    ],
+                    costList: [],
                 },
                 {
-                    costList: [
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                        {
-                            title: '水果',
-                            cost: 99.99,
-                        },
-                    ],
+                    costList: [],
                 },
             ],
 
@@ -307,35 +169,170 @@ export default {
                 pagination: {
                     el: '.swiper-pagination'
                 },
+                loop : true,
                 initialSlide: 1,
-                // Some Swiper option/callback...
-            }
+            },
+            tagList : [],
         };
     },
     computed: {
+        ...mapGetters([
+            'uid',
+        ]),
         swiper() {
             return this.$refs.mySwiper.$swiper
-        }
+        },
+        todayCost() {
+            let temp = '';
+            this.swipeData.forEach((elem) => {
+                if (elem.date === this.date) {
+                    temp = elem.costList.reduce((accumulator, currentValue) => accumulator + Number(currentValue.cost), 0);
+                }
+            });
+            return temp;
+        },
     },
     mounted() {
         this.date = dayjs().format('YYYY-MM-DD');
+        this.findAllTags();
+
+        // console.log(dayjs('2020-05-27').add(1, 'day'));
+        this.initialize();
     },
     methods: {
-        changeDate(index) {
-            console.log('change date'+ index);
+        async initialize() {
+            const today = dayjs().format('YYYY-MM-DD');
+            const yesterday = dayjs(today).subtract(1, 'day').format('YYYY-MM-DD');
+            const tomorrow = dayjs(today).add(1, 'day').format('YYYY-MM-DD');
 
-            // this.swipeData.push(
-            //     {
-            //         costList: [
-            //             {
-            //                 title: '水果',
-            //                 cost: 99.99,
-            //             }
-            //         ],
-            //     }
-            // );
+            const todayData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: today });
+            const yesterdayData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: yesterday });
+            const tomorrowData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: tomorrow });
 
-            // this.swiper.removeSlide(0);
+            console.log(todayData);
+            console.log(yesterdayData);
+            console.log(tomorrowData);
+
+            this.swipeData = [
+                { date: yesterdayData.date, costList: yesterdayData.result.rows },
+                { date: todayData.date, costList: todayData.result.rows },
+                { date: tomorrowData.date, costList: tomorrowData.result.rows },
+            ];
+        },
+
+
+        async findAllRecord() {
+            try {
+                const params = {
+                    uid: this.uid,
+                    date: this.date,
+                };
+                const { date, result } = await this.$api.costRecord.findAllRecord(params);
+                this.swipeData.forEach((elem) => {
+                    if (elem.date === date) {
+                        elem.costList = result.rows
+                    }
+                });
+            } catch (error) {
+                this.$toast(error);
+            }
+        },
+
+        async findAllTags() {
+            try {
+                const params = {
+                    uid: this.uid,
+                };
+                this.tagList = await this.$api.tag.findAllTags(params);
+            } catch (error) {
+                this.$toast(error);
+            }
+        },
+        async slidePrev() {
+            console.log(this.swiper.realIndex);
+            console.log('slidePrev');
+            const prevDate = dayjs(this.date).subtract(2, 'day').format('YYYY-MM-DD');
+            
+            const prevData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: prevDate });
+            console.log(prevData);
+
+            // 0 > 2
+            // 2 > 1
+            // 1 > 0
+            let targetIndex = 2
+            if (this.swiper.realIndex > 0) {
+                targetIndex = this.swiper.realIndex - 1;
+            }
+
+            this.swipeData[targetIndex] = { date: prevData.date, costList: prevData.result.rows };
+
+
+            this.date = dayjs(this.date).subtract(1, 'day').format('YYYY-MM-DD')
+
+            console.log(this.swipeData);
+        },
+        async slideNext() {
+            console.log(this.swiper.realIndex);
+            console.log('slideNext');
+            const nextDate = dayjs(this.date).add(2, 'day').format('YYYY-MM-DD');
+            
+            const nextData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: nextDate });
+            console.log(nextData);
+
+            // 2 > 0
+            // 0 > 1
+            // 1 > 2
+            let targetIndex = 0
+            if (this.swiper.realIndex < 2) {
+                targetIndex = this.swiper.realIndex + 1;
+            }
+
+            this.swipeData[targetIndex] = { date: nextData.date, costList: nextData.result.rows };
+
+
+            this.date = dayjs(this.date).add(1, 'day').format('YYYY-MM-DD')
+
+            console.log(this.swipeData);
+        },
+        async changeDate() {
+            // console.log(this.swiper.activeIndex);
+
+            // this.date = this.swipeData[this.swiper.activeIndex].date;
+
+            // if (this.swiper.isEnd) {
+            //     console.log('isEnd');
+            //     const nextDate = dayjs(this.date).add(1, 'day').format('YYYY-MM-DD');
+            //     const nextData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: nextDate });
+            //     console.log(nextData);
+
+            //     this.swipeData.push(
+            //         { date: nextData.date, costList: nextData.result.rows },
+            //     );
+
+                
+            // }
+
+            // if (this.swiper.isBeginning) {
+            //     console.log('isBeginning');
+                
+                
+            //     const prevDate = dayjs(this.date).subtract(1, 'day').format('YYYY-MM-DD');
+            //     const prevData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: prevDate });
+            //     console.log(prevData);
+
+            //     // this.swiper.prependSlide('<div class="swiper-slide">这是一个新的slide</div>'); //加到Swiper的第一个
+            //     this.swipeData.unshift(
+            //         { date: prevData.date, costList: prevData.result.rows },
+            //     );
+
+            //     this.swiper.updateSlides();
+
+            //     console.log(this.swipeData);
+            // }
+
+
+
+            
         },
         bbb() {
             this.$toast('coming soon');
@@ -349,11 +346,56 @@ export default {
             this.count++;
             this.show = true;
         },
-        submitCost() {
-            this.show = false;
+        deleteRecord(item) {
+            return () => {
+                this.$dialog.confirm({
+                    title: '标题',
+                    message: '弹窗内容',
+                }).then(async () => {
+                    const params = {
+                        record_id: item.record_id,
+                    };
+                    await this.$api.costRecord.deleteRecord(params);
+                    this.findAllRecord();
+                })
+            }
+            // console.log(item);
+            // try {
+            //     const params = {
+            //         uid: this.uid,
+            //         cost: this.cost,
+            //         tag_id: this.tagId,
+            //     };
+            //     await this.$api.costRecord.addRecord(params);
+            //     this.findAllRecord();
+            //     this.cost = '';
+            //     this.tagId = 0;
+            //     this.show = false;
+            // } catch (error) {
+            //     this.$toast(error);
+            //     this.show = false;
+            // }
         },
-        clickTag() {
-            this.tagName = '标签';
+        async submitCost() {
+            try {
+                const params = {
+                    uid: this.uid,
+                    cost: this.cost,
+                    tag_id: this.tagId,
+                };
+                await this.$api.costRecord.addRecord(params);
+                this.findAllRecord();
+                this.cost = '';
+                this.tagId = 0;
+                this.show = false;
+            } catch (error) {
+                this.$toast(error);
+                this.show = false;
+            }
+        },
+        clickTag(tag) {
+            this.tagName = tag.name;
+            this.tagId = tag.tag_id;
             this.showKeyboard = true;
         },
     },
@@ -448,6 +490,12 @@ export default {
                     justify-content: center;
                     align-items: flex-end;
                     font-size: 2rem;
+                }
+
+                .no-result{
+                    padding: 100px;
+                    background: #fff;
+                    text-align: center;
                 }
             }
             

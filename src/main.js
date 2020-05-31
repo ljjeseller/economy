@@ -10,13 +10,12 @@ import api from './api'
 Vue.config.productionTip = false
 Vue.prototype.$api = api;
 
-
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-
-// import style
 import 'swiper/css/swiper.css'
-
 Vue.use(VueAwesomeSwiper)
+
+import longTap from '@/utils/longTap'
+Vue.use(longTap)
 
 Vue.config.productionTip = false
 
