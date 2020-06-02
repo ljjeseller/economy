@@ -37,6 +37,8 @@ module.exports = {
         
         
     },
+    publicPath: '/economy/',
+    outputDir: 'economy',
     productionSourceMap: false,
     css: {
         loaderOptions: {

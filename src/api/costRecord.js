@@ -19,6 +19,23 @@ const findAllRecord = (params) => {
     });
 };
 
+// findAndSumWeekRecord
+const findAndSumWeekRecord = (params) => {
+    const url = `/api/v1/findAndSumWeekRecord`;
+    return new Promise((resolve, reject) => {
+        axios.post(url, params).then((response) => {
+            const { code, msg, data } = response.data;
+            if (code === 0) {
+                resolve(data);
+            } else {
+                reject(msg);
+            }
+        }).catch((error) => {
+            reject(error);
+        })
+    });
+};
+
 // addRecord
 const addRecord = (params) => {
     // console.log(params);
@@ -58,6 +75,7 @@ const deleteRecord = (params) => {
 
 export default {
     findAllRecord,
+    findAndSumWeekRecord,
     addRecord,
     deleteRecord,
 };

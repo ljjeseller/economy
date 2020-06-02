@@ -198,6 +198,8 @@ export default {
 
         // console.log(dayjs('2020-05-27').add(1, 'day'));
         this.initialize();
+        this.findAndSumWeekRecord();
+        
     },
     methods: {
         async initialize() {
@@ -209,9 +211,9 @@ export default {
             const yesterdayData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: yesterday });
             const tomorrowData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: tomorrow });
 
-            console.log(todayData);
-            console.log(yesterdayData);
-            console.log(tomorrowData);
+            // console.log(todayData);
+            // console.log(yesterdayData);
+            // console.log(tomorrowData);
 
             this.swipeData = [
                 { date: yesterdayData.date, costList: yesterdayData.result.rows },
@@ -220,6 +222,18 @@ export default {
             ];
         },
 
+        async findAndSumWeekRecord() {
+            try {
+                const params = {
+                    uid: this.uid,
+                    date: this.date,
+                };
+                const { weekSum } = await this.$api.costRecord.findAndSumWeekRecord(params);
+                this.lineChart.series[0].data = weekSum;
+            } catch (error) {
+                this.$toast(error);
+            }
+        },
 
         async findAllRecord() {
             try {
@@ -249,12 +263,12 @@ export default {
             }
         },
         async slidePrev() {
-            console.log(this.swiper.realIndex);
-            console.log('slidePrev');
+            // console.log(this.swiper.realIndex);
+            // console.log('slidePrev');
             const prevDate = dayjs(this.date).subtract(2, 'day').format('YYYY-MM-DD');
             
             const prevData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: prevDate });
-            console.log(prevData);
+            // console.log(prevData);
 
             // 0 > 2
             // 2 > 1
@@ -269,15 +283,20 @@ export default {
 
             this.date = dayjs(this.date).subtract(1, 'day').format('YYYY-MM-DD')
 
-            console.log(this.swipeData);
+            // console.log(this.swipeData);
+
+            const weekDay = dayjs(this.date).day();
+            if (weekDay === 0) {
+                this.findAndSumWeekRecord();
+            }
         },
         async slideNext() {
-            console.log(this.swiper.realIndex);
-            console.log('slideNext');
+            // console.log(this.swiper.realIndex);
+            // console.log('slideNext');
             const nextDate = dayjs(this.date).add(2, 'day').format('YYYY-MM-DD');
             
             const nextData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: nextDate });
-            console.log(nextData);
+            // console.log(nextData);
 
             // 2 > 0
             // 0 > 1
@@ -292,7 +311,13 @@ export default {
 
             this.date = dayjs(this.date).add(1, 'day').format('YYYY-MM-DD')
 
-            console.log(this.swipeData);
+            // console.log(this.swipeData);
+
+
+            const weekDay = dayjs(this.date).day();
+            if (weekDay === 1) {
+                this.findAndSumWeekRecord();
+            }
         },
         async changeDate() {
             // console.log(this.swiper.activeIndex);
