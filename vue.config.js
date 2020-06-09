@@ -2,7 +2,7 @@ const mode = process.env.NODE_ENV === 'production' ? '.min' : '';
 
 const cdn = {
 	css: [
-        "https://cdn.jsdelivr.net/npm/vant@2.5/lib/index.css",
+        "https://cdn.jsdelivr.net/npm/vant@2.8/lib/index.css",
     ],
     js: [
         // vue
@@ -16,7 +16,7 @@ const cdn = {
         // lodash
         `https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash${mode}.js`,
         // vant
-        `https://cdn.jsdelivr.net/npm/vant@2.5/lib/vant${mode}.js`,
+        `https://cdn.jsdelivr.net/npm/vant@2.8/lib/vant${mode}.js`,
 
         `https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.simple.min.js`,
         `https://cdn.jsdelivr.net/npm/vue-echarts@4.0.2`,

@@ -26,7 +26,7 @@
                                         :title="item.tags.tagName" 
                                         :value="item.cost" 
                                         :icon="item.tags.icon"
-                                        v-longpress="deleteRecord(item)"
+                                        v-longpress.prevent="deleteRecord(item)"
                                     />
                                     <div class="no-result" v-if="swipe.costList.length === 0"></div>
                                 </div>
@@ -78,20 +78,13 @@
 
         <van-popup
             v-model="showStatistics"
+            @open="statisticsCosts"
             position="bottom">
             
             <van-cell-group>
-                <van-cell title="单元格" value="内容" />
-                <van-cell title="单元格" value="内容" />
-                <van-cell title="单元格" value="内容" />
-                <van-cell title="单元格" value="内容" />
-                <van-cell title="单元格" value="内容" />
-                <van-cell title="单元格" value="内容" />
-                <van-cell title="单元格" value="内容" />
-                <van-cell title="单元格" value="内容" />
+                <van-cell v-for="(month, index) in monthSum" :key="index" :title="month.month" :value="`${month.sum} 元`" />
+                <van-cell title="总计" :value="`${yearCost} 元`" />
             </van-cell-group>
-            
-            
         </van-popup>
 
     </div>
@@ -173,6 +166,7 @@ export default {
                 initialSlide: 1,
             },
             tagList : [],
+            monthSum: [],
         };
     },
     computed: {
@@ -190,6 +184,9 @@ export default {
                 }
             });
             return temp;
+        },
+        yearCost() {
+            return this.monthSum.reduce((accumulator, currentValue) => accumulator + Number(currentValue.sum), 0);
         },
     },
     mounted() {
@@ -319,50 +316,6 @@ export default {
                 this.findAndSumWeekRecord();
             }
         },
-        async changeDate() {
-            // console.log(this.swiper.activeIndex);
-
-            // this.date = this.swipeData[this.swiper.activeIndex].date;
-
-            // if (this.swiper.isEnd) {
-            //     console.log('isEnd');
-            //     const nextDate = dayjs(this.date).add(1, 'day').format('YYYY-MM-DD');
-            //     const nextData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: nextDate });
-            //     console.log(nextData);
-
-            //     this.swipeData.push(
-            //         { date: nextData.date, costList: nextData.result.rows },
-            //     );
-
-                
-            // }
-
-            // if (this.swiper.isBeginning) {
-            //     console.log('isBeginning');
-                
-                
-            //     const prevDate = dayjs(this.date).subtract(1, 'day').format('YYYY-MM-DD');
-            //     const prevData = await this.$api.costRecord.findAllRecord({ uid: this.uid, date: prevDate });
-            //     console.log(prevData);
-
-            //     // this.swiper.prependSlide('<div class="swiper-slide">这是一个新的slide</div>'); //加到Swiper的第一个
-            //     this.swipeData.unshift(
-            //         { date: prevData.date, costList: prevData.result.rows },
-            //     );
-
-            //     this.swiper.updateSlides();
-
-            //     console.log(this.swipeData);
-            // }
-
-
-
-            
-        },
-        bbb() {
-            this.$toast('coming soon');
-            this.$router.push({ name: 'Login' });
-        },
         toSetting() {
             this.$router.push({ name: 'Setting' });
         },
@@ -373,40 +326,31 @@ export default {
         },
         deleteRecord(item) {
             return () => {
+                console.log(item);
                 this.$dialog.confirm({
-                    title: '标题',
-                    message: '弹窗内容',
+                    title: '提示',
+                    message: `确认删除 ${item.tags.tagName} ${item.cost} 的记录吗`,
                 }).then(async () => {
                     const params = {
                         record_id: item.record_id,
                     };
                     await this.$api.costRecord.deleteRecord(params);
                     this.findAllRecord();
-                })
+                }).catch(() => {});
             }
-            // console.log(item);
-            // try {
-            //     const params = {
-            //         uid: this.uid,
-            //         cost: this.cost,
-            //         tag_id: this.tagId,
-            //     };
-            //     await this.$api.costRecord.addRecord(params);
-            //     this.findAllRecord();
-            //     this.cost = '';
-            //     this.tagId = 0;
-            //     this.show = false;
-            // } catch (error) {
-            //     this.$toast(error);
-            //     this.show = false;
-            // }
         },
         async submitCost() {
+            if (this.cost === '') {
+                this.$toast('cost is required');
+                return false;
+            }
+
             try {
                 const params = {
                     uid: this.uid,
                     cost: this.cost,
                     tag_id: this.tagId,
+                    datetime: this.date,
                 };
                 await this.$api.costRecord.addRecord(params);
                 this.findAllRecord();
@@ -416,6 +360,18 @@ export default {
             } catch (error) {
                 this.$toast(error);
                 this.show = false;
+            }
+        },
+        async statisticsCosts() {
+            try {
+                const params = {
+                    uid: this.uid,
+                    date: this.date,
+                };
+                const { monthSum } = await this.$api.costRecord.findAndSumMonthRecord(params);
+                this.monthSum = monthSum;
+            } catch (error) {
+                this.$toast(error);
             }
         },
         clickTag(tag) {

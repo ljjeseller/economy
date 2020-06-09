@@ -2,7 +2,7 @@ export default {
 
     install(Vue, options = {
 
-        time: 1000,
+        time: 500,
 
     }) {
 
@@ -31,7 +31,8 @@ export default {
                 // 创建计时器（ 1秒后执行函数 ）
 
                 let start = (e) => {
-
+                    e.preventDefault();
+                    
                     if (e.type === 'click' && e.button !== 0) {
 
                         return
