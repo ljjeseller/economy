@@ -326,7 +326,7 @@ export default {
         },
         deleteRecord(item) {
             return () => {
-                console.log(item);
+                // console.log(item);
                 this.$dialog.confirm({
                     title: '提示',
                     message: `确认删除 ${item.tags.tagName} ${item.cost} 的记录吗`,

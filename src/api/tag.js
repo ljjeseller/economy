@@ -2,7 +2,7 @@ import axios from '../config/axios'
 
 
 // findAllTags
-const findAllTags = (params) => {
+const findAllTags = (params, slide = false) => {
     // console.log(params);
     const url = `/api/v1/findAllTags`;
     return new Promise((resolve, reject) => {
@@ -10,9 +10,13 @@ const findAllTags = (params) => {
             const { code, msg, data } = response.data;
             if (code === 0) {
                 const tags = data.result.rows;
+                
+                if (slide) {
+                    resolve(tags);
+                }
+
                 const per = 8;
                 const temp = [];
-
                 tags.forEach((tag, index) => {  
                     if ( index % per === 0 ) {
                         temp.push({ items: []});
