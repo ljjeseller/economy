@@ -17,7 +17,7 @@ export default {
                     let warn = `[longpress:] provided expression '${binding.expression}' is not afunction, but has to be `
 
                     if (compName) { warn += `Found in component '${compName}' ` }
-
+                    /* eslint-disable-next-line */
                     console.warn(warn)
 
                 }
